@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+    "baseUrl": "./",
+	"noLib": false,
+	"rootDir": "./source/",
+	"removeComments": false,
+	"emitDecoratorMetadata": true,
+	"noImplicitAny": false,
+	"experimentalDecorators": true,
+	"sourceMap": true,
+	"noResolve": false,
+    "module": "commonjs",
+	"moduleResolution": "node",
+	"typeRoots": [
+		"node_modules/@types"
+    ],
+	"types": ["node"],
+	"lib": [
+	  "dom",
+      "es2017"
+    ],
+	"target": "es5",
+	"declaration": true
+  }
+}

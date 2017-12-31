@@ -1,7 +1,8 @@
 # @xiara/mongo
-Advanced MongoDB ODM typescript based for Node.js. With all core features supported.
+Xiara/Mongo is a MongoDB ODM written entirely in typescript. It is based on mongo-node driver and aim's to support the latest features available in mongo.
+This is an object modeling tool designed to work in asynchronous environments.
 
-## WHY
+## WHY?!
 All the avilable libraries & frameworks require you to create an Interface and on top of that to create the definition of the model.
 Or they are low with features, performance or are not documented properly and out-dated.
 
@@ -341,12 +342,12 @@ export class ExampleModel extends MongoCollection
 **Aggregate**
 ```typescript
 // Specify custom outputs for aggregates
-interface IMyAggregationResult
+class CustomCollection extends MongoCollection
 {
 	count: number;
 }
 
-TodoModel.aggregate<IMyAggregationResult>([
+CustomCollection.aggregate<CustomCollection>([
 	{
 		$group: {
 			// ...
@@ -373,10 +374,6 @@ UserModel.query<UserModel>({
 	.gte({upvotes: 100})
 	.lte({downvotes: 10})
 	.populate("friends")
-	.cast<ICustomResult>() // Cast the output to ICustomResult interface (Similar to project..)
-	.project({
-		accountname: "username",
-	})
 	.forEach( user => {
 		console.log("users online", user);
 	});
@@ -388,11 +385,66 @@ UserModel.query<UserModel>({
 	
 ```
 
+**User Model Example & Password hashing**
+
+UserModel.ts:
+```typescript
+import { Model, MongoCollection, Property, Hook } from "@xiara/mongo";
+import { TimedCollection } from "./Base";
+import { compareSync, genSaltSync, hashSync } from "bcrypt";
+
+@Model("users")
+export class UserModel extends MongoCollection
+{
+	@Property({ required: true, unique: true })
+	username: string;
+
+	@Property({ required: true, hidden: true })
+	protected hashedPassword: string;
+
+	get password(): string
+	{
+		return this.hashedPassword;
+	}
+
+	set password(inValue: string)
+	{
+		this.hashedPassword = hashSync(inValue, genSaltSync(10));
+	}
+
+	validatePassword(inPassword: string): boolean
+	{
+		return compareSync(inPassword, this.hashedPassword)
+	}
+}
+```
+
+App.ts
+```typescript
+import { UserModel } from "./UserModel";
+
+let user = new UserModel();
+user.username = "azarus";
+user.password = "test";
+user.save().catch( error => {
+	console.log("error:", error);
+})
+UserModel.findOne<UserModel>({
+	username: "azarus"
+}).then( user => {
+	console.log("Password valid:", user.validatePassword("test"));
+})
+```
+
 ## Have a question?
-- Open an issue.
+- [Open an issue. https://github.com/azarus/xiara-mongo/issues](https://github.com/azarus/xiara-mongo/issues)
 
 
 ## License
 MIT
 
+## Soon
+- Plugins
+- More Hooks
+- More Features
 
