@@ -11,6 +11,9 @@ So i come up with the simplest solution. Define your model as a class with a sin
 
 ## Quick Start
 
+Install via NPM:
+`npm install @xiara/mongo`
+
 ```typescript
 import { MongoAdapter } from "@xiara/mongo";
 
