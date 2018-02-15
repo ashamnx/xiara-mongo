@@ -4,8 +4,8 @@
   "description": "Advanced MongoDB ODM typescript based for Node.js. With all core features supported!",
   "homepage": "https://github.com/azarus/xiara-mongo",
   "repository": {
-	"type": "git", 
-	"url": "git+https://github.com/azarus/xiara-mongo.git"
+    "type": "git",
+    "url": "git+https://github.com/azarus/xiara-mongo.git"
   },
   "main": "./build/main.js",
   "types": "./build/main.d.ts",

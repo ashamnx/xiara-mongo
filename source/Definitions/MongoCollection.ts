@@ -2,7 +2,7 @@ import { MongoAdapter } from "../MongoAdapter";
 import { MongoSchema, IProperty } from "./MongoSchema";
 import { Property } from "./Decorators";
 import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
-import { Db, Collection, Cursor, AggregationCursor, ObjectId, WriteOpResult, InsertOneWriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions } from "mongodb";
+import { Db, Collection, Cursor, AggregationCursor, ObjectId, WriteOpResult, InsertOneWriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, DeleteWriteOpResultObject, ReplaceWriteOpResult, InsertWriteOpResult, CollStats } from "mongodb";
 //import { IFindQuery } "./FindQuery";
 import { MongoSchemaRegistry } from "./MongoSchemaRegistry";
 export interface ICollection
@@ -36,7 +36,7 @@ export class MongoCollection implements ICollection
 			return;
 			
 		let schema = this.getSchemaDefinition();
-		for(var field of schema.fields)
+		for(let field of schema.fields)
 		{
 			if(field.options)
 			{
@@ -71,8 +71,8 @@ export class MongoCollection implements ICollection
 
 	dehydrate(fields: IProperty[]): object
 	{
-		var rawData = {};
-		for(var field of fields)
+		let rawData = {};
+		for(let field of fields)
 		{
 			if(field.options.reference)
 			{
@@ -119,6 +119,19 @@ export class MongoCollection implements ICollection
 		return this.dehydrate(schema.getVisibleFields());
 	}
 
+	getValidatedObject(): object
+	{
+		let schema = this.getSchemaDefinition();
+		let collection = schema.collection();
+		let data = this.toObject();
+		let validationResult = schema.validate(data);
+		if(!validationResult)
+		{
+			return null;
+		}
+		return data;
+	}
+
 	static query<T extends MongoCollection>(query?: Object): MongoQuery< T >
 	{
 		return new MongoQuery<T>(this, query);
@@ -136,21 +149,33 @@ export class MongoCollection implements ICollection
 
 	static createOne<T extends MongoCollection>(data?: Object): Promise< T >
 	{
-		var instance: T = this.constructCollection<T>(<any>this);
+		let instance: T = this.constructCollection<T>(<any>this);
 		instance.hydrate(data);
 		return instance.save();
 	}
 
 	static updateOne<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions = undefined): Promise<UpdateWriteOpResult>
 	{
-		var collection = this.getSchema().collection();
+		let collection = this.getSchema().collection();
 		return collection.updateOne(query, data, options);
 	}
 
 	static update<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions & { multi?: boolean } = undefined): Promise<WriteOpResult>
 	{
-		var collection = this.getSchema().collection();
+		let collection = this.getSchema().collection();
 		return collection.update(query, data, options);
+	}
+
+	static remove(query: Object): Promise<WriteOpResult>
+	{
+		let  collection = this.getSchema().collection();
+		return collection.remove(query);
+	}
+
+	static removeOne(query: Object): Promise<WriteOpResult>
+	{
+		let  collection = this.getSchema().collection();
+		return collection.remove(query, {single: true});
 	}
 
 	static aggregate<T extends MongoCollection>(pipeline:any[] = []): AggregationCursor<T>
@@ -166,6 +191,11 @@ export class MongoCollection implements ICollection
 	static getCollection(): Collection<any>
 	{
 		return this.getSchema().collection();
+	}
+
+	static stats(): Promise<CollStats>
+	{
+		return this.getCollection().stats();
 	}
 
 	collection(): Collection<any>
@@ -192,8 +222,8 @@ export class MongoCollection implements ICollection
 	insert(options: CollectionInsertOneOptions = undefined): Promise<this>
 	{
 		let schema = this.getSchemaDefinition();
-		var collection = schema.collection();
-		var data = this.toObject();
+		let collection = schema.collection();
+		let data = this.toObject();
 		let validationResult = schema.validate(data);
 		if(!validationResult)
 		{
@@ -208,8 +238,8 @@ export class MongoCollection implements ICollection
 	update(options: ReplaceOneOptions = undefined): Promise<this>
 	{
 		let schema = this.getSchemaDefinition();
-		var collection = schema.collection();
-		var data = this.toObject();
+		let collection = schema.collection();
+		let data = this.toObject();
 		let validationResult = schema.validate(data);
 		if(!validationResult)
 		{
@@ -234,5 +264,18 @@ export class MongoCollection implements ICollection
 		return this.collection().deleteOne({
 			_id: this._id
 		});
+	}
+
+	replace(replaceWith: MongoCollection): Promise<WriteOpResult>
+	{
+		let schema = replaceWith.getSchemaDefinition();
+		let collection = schema.collection();
+		let data = replaceWith.toObject();
+		let validationResult = schema.validate(data);
+		if(!validationResult)
+		{
+			return this.collection().replaceOne({ _id: this._id }, data);
+		}
+		return Promise.reject(validationResult);
 	}
 };
