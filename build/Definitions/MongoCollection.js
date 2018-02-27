@@ -14,6 +14,7 @@ var Query_1 = require("./Query");
 var mongodb_1 = require("mongodb");
 //import { IFindQuery } "./FindQuery";
 var MongoSchemaRegistry_1 = require("./MongoSchemaRegistry");
+var bson_1 = require("bson");
 ;
 var MongoCollection = /** @class */ (function () {
     //_version: number;
@@ -103,13 +104,21 @@ var MongoCollection = /** @class */ (function () {
         }
         return data;
     };
+    MongoCollection.sanitizeQuery = function (query) {
+        if (query && query._id && typeof query._id === "string") {
+            query._id = new bson_1.ObjectID(query._id);
+        }
+    };
     MongoCollection.query = function (query) {
+        MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQuery(this, query);
     };
     MongoCollection.find = function (query) {
+        MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQueryMulti(this, query);
     };
     MongoCollection.findOne = function (query) {
+        MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQuerySingle(this, query);
     };
     MongoCollection.createOne = function (data) {
@@ -119,19 +128,27 @@ var MongoCollection = /** @class */ (function () {
     };
     MongoCollection.updateOne = function (query, data, options) {
         if (options === void 0) { options = undefined; }
+        MongoCollection.sanitizeQuery(query);
         var collection = this.getSchema().collection();
-        return collection.updateOne(query, data, options);
+        return collection.updateOne(query, {
+            $set: data
+        }, options);
     };
     MongoCollection.update = function (query, data, options) {
         if (options === void 0) { options = undefined; }
+        MongoCollection.sanitizeQuery(query);
         var collection = this.getSchema().collection();
-        return collection.update(query, data, options);
+        return collection.update(query, {
+            $set: data
+        }, options);
     };
     MongoCollection.remove = function (query) {
+        MongoCollection.sanitizeQuery(query);
         var collection = this.getSchema().collection();
         return collection.remove(query);
     };
     MongoCollection.removeOne = function (query) {
+        MongoCollection.sanitizeQuery(query);
         var collection = this.getSchema().collection();
         return collection.remove(query, { single: true });
     };

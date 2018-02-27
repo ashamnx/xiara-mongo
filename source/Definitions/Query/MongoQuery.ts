@@ -1,4 +1,4 @@
-import { Db, Collection, AggregationCursor, AggregationCursorResult, CollectionAggregationOptions, MongoCallback } from "mongodb";
+import { Db, Collection, AggregationCursor, AggregationCursorResult, CollectionAggregationOptions, MongoCallback, ObjectID } from "mongodb";
 import { MongoCollection } from "../MongoCollection";
 import { MongoSchemaRegistry } from "../MongoSchemaRegistry";
 export class MongoQuery<T>
@@ -6,7 +6,7 @@ export class MongoQuery<T>
 	public isLean: boolean = false;
 	public pipeline = [];
 	public populatedFields:any[] = [];
-	constructor(public collection: typeof MongoCollection, public query?: Object)
+	constructor(public collection: typeof MongoCollection, public query?: any)
 	{
 		if(query != null)
 		{
@@ -20,7 +20,7 @@ export class MongoQuery<T>
 		return this;
 	}
 
-	where(clause?: object): this
+	where(clause?: any): this
 	{
 		this.pipeline.push({
 			$match: clause,

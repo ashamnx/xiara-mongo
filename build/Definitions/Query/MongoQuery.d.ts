@@ -2,13 +2,13 @@ import { AggregationCursor, CollectionAggregationOptions, MongoCallback } from "
 import { MongoCollection } from "../MongoCollection";
 export declare class MongoQuery<T> {
     collection: typeof MongoCollection;
-    query: Object;
+    query: any;
     isLean: boolean;
     pipeline: any[];
     populatedFields: any[];
-    constructor(collection: typeof MongoCollection, query?: Object);
+    constructor(collection: typeof MongoCollection, query?: any);
     lean(isLean?: boolean): this;
-    where(clause?: object): this;
+    where(clause?: any): this;
     gt(clause?: object): this;
     gte(clause?: object): this;
     lt(clause?: object): this;

@@ -5,6 +5,7 @@ import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
 import { Db, Collection, Cursor, AggregationCursor, ObjectId, WriteOpResult, InsertOneWriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, DeleteWriteOpResultObject, ReplaceWriteOpResult, InsertWriteOpResult, CollStats } from "mongodb";
 //import { IFindQuery } "./FindQuery";
 import { MongoSchemaRegistry } from "./MongoSchemaRegistry";
+import { ObjectID } from "bson";
 export interface ICollection
 {
 	getSchemaDefinition(): MongoSchema;
@@ -132,18 +133,29 @@ export class MongoCollection implements ICollection
 		return data;
 	}
 
+	private static sanitizeQuery(query: any)
+	{
+		if(query && query._id && typeof query._id === "string")
+		{
+			query._id = new ObjectID(query._id);
+		}
+	}
+
 	static query<T extends MongoCollection>(query?: Object): MongoQuery< T >
 	{
+		MongoCollection.sanitizeQuery(query);
 		return new MongoQuery<T>(this, query);
 	}
 
 	static find<T extends MongoCollection>(query?: Object): MongoQueryMulti< T >
 	{
+		MongoCollection.sanitizeQuery(query);
 		return new MongoQueryMulti<T>(this, query);
 	}
 	
 	static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >
 	{
+		MongoCollection.sanitizeQuery(query);
 		return new MongoQuerySingle<T>(this, query);
 	}
 
@@ -156,24 +168,32 @@ export class MongoCollection implements ICollection
 
 	static updateOne<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions = undefined): Promise<UpdateWriteOpResult>
 	{
+		MongoCollection.sanitizeQuery(query);
 		let collection = this.getSchema().collection();
-		return collection.updateOne(query, data, options);
+		return collection.updateOne(query, {
+			$set: data
+		}, options);
 	}
 
 	static update<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions & { multi?: boolean } = undefined): Promise<WriteOpResult>
 	{
+		MongoCollection.sanitizeQuery(query);
 		let collection = this.getSchema().collection();
-		return collection.update(query, data, options);
+		return collection.update(query, {
+			$set: data
+		}, options);
 	}
 
 	static remove(query: Object): Promise<WriteOpResult>
 	{
+		MongoCollection.sanitizeQuery(query);
 		let  collection = this.getSchema().collection();
 		return collection.remove(query);
 	}
 
 	static removeOne(query: Object): Promise<WriteOpResult>
 	{
+		MongoCollection.sanitizeQuery(query);
 		let  collection = this.getSchema().collection();
 		return collection.remove(query, {single: true});
 	}

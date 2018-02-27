@@ -13,6 +13,7 @@ export declare class MongoCollection implements ICollection {
     toObject(): object;
     toJSON(): object;
     getValidatedObject(): object;
+    private static sanitizeQuery(query);
     static query<T extends MongoCollection>(query?: Object): MongoQuery<T>;
     static find<T extends MongoCollection>(query?: Object): MongoQueryMulti<T>;
     static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
