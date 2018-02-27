@@ -22,7 +22,10 @@ export class MongoQuerySingle<T extends MongoCollection> extends MongoQuery<T>
 				{
 					return resolve(data);
 				}
-				
+				if(!data)
+				{
+					return resolve(data);
+				}
 				var instance: T = this.collection.constructCollection<T>(<any>this.collection);
 				instance.hydrate(data);
 				resolve(instance);

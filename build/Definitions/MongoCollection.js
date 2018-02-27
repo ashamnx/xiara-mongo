@@ -93,6 +93,16 @@ var MongoCollection = /** @class */ (function () {
         var schema = this.getSchemaDefinition();
         return this.dehydrate(schema.getVisibleFields());
     };
+    MongoCollection.prototype.getValidatedObject = function () {
+        var schema = this.getSchemaDefinition();
+        var collection = schema.collection();
+        var data = this.toObject();
+        var validationResult = schema.validate(data);
+        if (!validationResult) {
+            return null;
+        }
+        return data;
+    };
     MongoCollection.query = function (query) {
         return new Query_1.MongoQuery(this, query);
     };
@@ -117,6 +127,14 @@ var MongoCollection = /** @class */ (function () {
         var collection = this.getSchema().collection();
         return collection.update(query, data, options);
     };
+    MongoCollection.remove = function (query) {
+        var collection = this.getSchema().collection();
+        return collection.remove(query);
+    };
+    MongoCollection.removeOne = function (query) {
+        var collection = this.getSchema().collection();
+        return collection.remove(query, { single: true });
+    };
     MongoCollection.aggregate = function (pipeline) {
         if (pipeline === void 0) { pipeline = []; }
         return this.getCollection().aggregate(pipeline);
@@ -126,6 +144,9 @@ var MongoCollection = /** @class */ (function () {
     };
     MongoCollection.getCollection = function () {
         return this.getSchema().collection();
+    };
+    MongoCollection.stats = function () {
+        return this.getCollection().stats();
     };
     MongoCollection.prototype.collection = function () {
         return this.getSchemaDefinition().collection();
@@ -183,6 +204,16 @@ var MongoCollection = /** @class */ (function () {
         return this.collection().deleteOne({
             _id: this._id
         });
+    };
+    MongoCollection.prototype.replace = function (replaceWith) {
+        var schema = replaceWith.getSchemaDefinition();
+        var collection = schema.collection();
+        var data = replaceWith.toObject();
+        var validationResult = schema.validate(data);
+        if (!validationResult) {
+            return this.collection().replaceOne({ _id: this._id }, data);
+        }
+        return Promise.reject(validationResult);
     };
     __decorate([
         Decorators_1.Property(),

@@ -29,6 +29,9 @@ var MongoQuerySingle = /** @class */ (function (_super) {
                 if (_this.isLean) {
                     return resolve(data);
                 }
+                if (!data) {
+                    return resolve(data);
+                }
                 var instance = _this.collection.constructCollection(_this.collection);
                 instance.hydrate(data);
                 resolve(instance);

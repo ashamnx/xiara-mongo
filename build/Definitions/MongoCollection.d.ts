@@ -1,6 +1,6 @@
 import { MongoSchema, IProperty } from "./MongoSchema";
 import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
-import { Collection, AggregationCursor, ObjectId, WriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions } from "mongodb";
+import { Collection, AggregationCursor, ObjectId, WriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, CollStats } from "mongodb";
 export interface ICollection {
     getSchemaDefinition(): MongoSchema;
 }
@@ -12,6 +12,7 @@ export declare class MongoCollection implements ICollection {
     dehydrate(fields: IProperty[]): object;
     toObject(): object;
     toJSON(): object;
+    getValidatedObject(): object;
     static query<T extends MongoCollection>(query?: Object): MongoQuery<T>;
     static find<T extends MongoCollection>(query?: Object): MongoQueryMulti<T>;
     static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
@@ -20,13 +21,17 @@ export declare class MongoCollection implements ICollection {
     static update<T extends MongoCollection>(query?: Object, data?: Object, options?: ReplaceOneOptions & {
         multi?: boolean;
     }): Promise<WriteOpResult>;
+    static remove(query: Object): Promise<WriteOpResult>;
+    static removeOne(query: Object): Promise<WriteOpResult>;
     static aggregate<T extends MongoCollection>(pipeline?: any[]): AggregationCursor<T>;
     static getSchema(): MongoSchema;
     static getCollection(): Collection<any>;
+    static stats(): Promise<CollStats>;
     collection(): Collection<any>;
     getSchemaDefinition(): MongoSchema;
     save(options?: any): Promise<any>;
     insert(options?: CollectionInsertOneOptions): Promise<this>;
     update(options?: ReplaceOneOptions): Promise<this>;
     remove(): Promise<any>;
+    replace(replaceWith: MongoCollection): Promise<WriteOpResult>;
 }
