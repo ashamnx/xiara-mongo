@@ -1,6 +1,6 @@
 import { MongoSchema, IProperty } from "./MongoSchema";
 import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
-import { Collection, AggregationCursor, ObjectId, WriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, CollStats } from "mongodb";
+import { Collection, AggregationCursor, ObjectId, WriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, CollStats, FindOneAndReplaceOption, FindAndModifyWriteOpResultObject } from "mongodb";
 export interface ICollection {
     getSchemaDefinition(): MongoSchema;
 }
@@ -18,6 +18,7 @@ export declare class MongoCollection implements ICollection {
     static find<T extends MongoCollection>(query?: Object): MongoQueryMulti<T>;
     static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
     static createOne<T extends MongoCollection>(data?: Object): Promise<T>;
+    static findOneAndUpdate<T extends MongoCollection>(query?: Object, data?: Object, options?: FindOneAndReplaceOption): Promise<FindAndModifyWriteOpResultObject>;
     static updateOne<T extends MongoCollection>(query?: Object, data?: Object, options?: ReplaceOneOptions): Promise<UpdateWriteOpResult>;
     static update<T extends MongoCollection>(query?: Object, data?: Object, options?: ReplaceOneOptions & {
         multi?: boolean;

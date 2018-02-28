@@ -109,8 +109,6 @@ export class MongoQuery<T>
 			if(this.populatedFields.indexOf(field) >= 0)
 				continue;
 
-			console.log("populating field:", field);
-
 			let localField = schema.findField(field);
 			if(!localField.options || !localField.options.reference)
 				continue;
@@ -123,7 +121,7 @@ export class MongoQuery<T>
 					from: foreignSchema.name,
 					localField: localField.name,
 					foreignField: foreignField.name,
-					as: localField.name,
+					as: "" + localField.name,
 				}
 			});
 

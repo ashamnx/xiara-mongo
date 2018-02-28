@@ -90,7 +90,6 @@ var MongoQuery = /** @class */ (function () {
             var field = fields_5[_a];
             if (this.populatedFields.indexOf(field) >= 0)
                 continue;
-            console.log("populating field:", field);
             var localField = schema.findField(field);
             if (!localField.options || !localField.options.reference)
                 continue;
@@ -101,7 +100,7 @@ var MongoQuery = /** @class */ (function () {
                     from: foreignSchema.name,
                     localField: localField.name,
                     foreignField: foreignField.name,
-                    as: localField.name,
+                    as: "" + localField.name,
                 }
             });
             this.pipeline.push({

@@ -2,7 +2,7 @@ import { MongoAdapter } from "../MongoAdapter";
 import { MongoSchema, IProperty } from "./MongoSchema";
 import { Property } from "./Decorators";
 import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
-import { Db, Collection, Cursor, AggregationCursor, ObjectId, WriteOpResult, InsertOneWriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, DeleteWriteOpResultObject, ReplaceWriteOpResult, InsertWriteOpResult, CollStats } from "mongodb";
+import { Db, Collection, Cursor, AggregationCursor, ObjectId, WriteOpResult, InsertOneWriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, DeleteWriteOpResultObject, ReplaceWriteOpResult, InsertWriteOpResult, CollStats, FindOneAndReplaceOption, FindAndModifyWriteOpResultObject } from "mongodb";
 //import { IFindQuery } "./FindQuery";
 import { MongoSchemaRegistry } from "./MongoSchemaRegistry";
 import { ObjectID } from "bson";
@@ -164,6 +164,23 @@ export class MongoCollection implements ICollection
 		let instance: T = this.constructCollection<T>(<any>this);
 		instance.hydrate(data);
 		return instance.save();
+	}
+
+	static findOneAndUpdate<T extends MongoCollection>(query?: Object, data?: Object, options: FindOneAndReplaceOption = undefined): Promise<FindAndModifyWriteOpResultObject>
+	{
+		MongoCollection.sanitizeQuery(query);
+		let collection = this.getSchema().collection();
+		return collection.findOneAndUpdate(query, {
+			$set: data
+		}, options).then( result => {
+			if(options && options.returnOriginal)
+			{
+				return result.value;
+			}
+			return result;
+		}).catch( error => {
+			return error;
+		})
 	}
 
 	static updateOne<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions = undefined): Promise<UpdateWriteOpResult>

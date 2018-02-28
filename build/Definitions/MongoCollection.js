@@ -126,6 +126,21 @@ var MongoCollection = /** @class */ (function () {
         instance.hydrate(data);
         return instance.save();
     };
+    MongoCollection.findOneAndUpdate = function (query, data, options) {
+        if (options === void 0) { options = undefined; }
+        MongoCollection.sanitizeQuery(query);
+        var collection = this.getSchema().collection();
+        return collection.findOneAndUpdate(query, {
+            $set: data
+        }, options).then(function (result) {
+            if (options && options.returnOriginal) {
+                return result.value;
+            }
+            return result;
+        }).catch(function (error) {
+            return error;
+        });
+    };
     MongoCollection.updateOne = function (query, data, options) {
         if (options === void 0) { options = undefined; }
         MongoCollection.sanitizeQuery(query);
