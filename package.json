@@ -1,7 +1,7 @@
 {
   "name": "@xiara/mongo",
-  "version": "0.0.5",
-  "description": "Advanced MongoDB ODM typescript based for Node.js. With all core features supported!",
+  "version": "0.0.6",
+  "description": "Advanced Typescript MongoDB ODM. Written entirely in typescript.",
   "homepage": "https://github.com/azarus/xiara-mongo",
   "repository": {
     "type": "git",
