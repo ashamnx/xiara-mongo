@@ -57,10 +57,9 @@ export class MongoCollection implements ICollection
 					this[field.name] = field.options.default;
 					continue;
 				}
-				console.log("data["+field.name+"]", data[field.name]);
+				
 				if(data[field.name] && field.options.reference && typeof data[field.name] === "object")
 				{
-					console.log("hydrating:", field.name, typeof data[field.name]);
 					let referencedCollection = new field.options.reference();
 					referencedCollection.hydrate(data[field.name]);
 					this[field.name] = referencedCollection;
@@ -71,16 +70,16 @@ export class MongoCollection implements ICollection
 		}
 	}
 
-	dehydrate(fields: IProperty[]): object
+	dehydrate(fields: IProperty[], dropReferences: boolean = false): object
 	{
 		let rawData = {};
 		for(let field of fields)
 		{
-			if(field.options.reference)
+			if(field.options.reference && dropReferences)
 			{
 				if(this[field.name] === undefined || this[field.name] === null)
-					continue;	
-				
+					continue;
+
 				rawData[field.name] = this[field.name][field.options.by || "_id"];
 				continue;
 			}
@@ -106,6 +105,12 @@ export class MongoCollection implements ICollection
 			
 		}
 		return rawData;
+	}
+
+	toMongoStore()
+	{
+		let schema = this.getSchemaDefinition();
+		return this.dehydrate(schema.fields, true);
 	}
 
 	toObject(): object
@@ -261,13 +266,12 @@ export class MongoCollection implements ICollection
 	{
 		let schema = this.getSchemaDefinition();
 		let collection = schema.collection();
-		let data = this.toObject();
+		let data = this.toMongoStore();
 		let validationResult = schema.validate(data);
 		if(!validationResult)
 		{
 			return collection.insertOne(data, options).then( result => {
 				this._id = result.insertedId; // Assign inserted _id
-				console.log("New insertedId:", this._id);
 				return this;
 			});
 		}
@@ -278,7 +282,7 @@ export class MongoCollection implements ICollection
 	{
 		let schema = this.getSchemaDefinition();
 		let collection = schema.collection();
-		let data = this.toObject();
+		let data = this.toMongoStore();
 		let validationResult = schema.validate(data);
 		if(!validationResult)
 		{
@@ -309,7 +313,7 @@ export class MongoCollection implements ICollection
 	{
 		let schema = replaceWith.getSchemaDefinition();
 		let collection = schema.collection();
-		let data = replaceWith.toObject();
+		let data = replaceWith.toMongoStore();
 		let validationResult = schema.validate(data);
 		if(!validationResult)
 		{

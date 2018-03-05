@@ -100,7 +100,7 @@ var MongoQuery = /** @class */ (function () {
                     from: foreignSchema.name,
                     localField: localField.name,
                     foreignField: foreignField.name,
-                    as: "" + localField.name,
+                    as: localField.name,
                 }
             });
             this.pipeline.push({

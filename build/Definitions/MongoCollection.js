@@ -46,9 +46,7 @@ var MongoCollection = /** @class */ (function () {
                     this[field.name] = field.options.default;
                     continue;
                 }
-                console.log("data[" + field.name + "]", data[field.name]);
                 if (data[field.name] && field.options.reference && typeof data[field.name] === "object") {
-                    console.log("hydrating:", field.name, typeof data[field.name]);
                     var referencedCollection = new field.options.reference();
                     referencedCollection.hydrate(data[field.name]);
                     this[field.name] = referencedCollection;
@@ -58,11 +56,12 @@ var MongoCollection = /** @class */ (function () {
             this[field.name] = data[field.name];
         }
     };
-    MongoCollection.prototype.dehydrate = function (fields) {
+    MongoCollection.prototype.dehydrate = function (fields, dropReferences) {
+        if (dropReferences === void 0) { dropReferences = false; }
         var rawData = {};
         for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
             var field = fields_1[_i];
-            if (field.options.reference) {
+            if (field.options.reference && dropReferences) {
                 if (this[field.name] === undefined || this[field.name] === null)
                     continue;
                 rawData[field.name] = this[field.name][field.options.by || "_id"];
@@ -86,6 +85,10 @@ var MongoCollection = /** @class */ (function () {
             }
         }
         return rawData;
+    };
+    MongoCollection.prototype.toMongoStore = function () {
+        var schema = this.getSchemaDefinition();
+        return this.dehydrate(schema.fields, true);
     };
     MongoCollection.prototype.toObject = function () {
         var schema = this.getSchemaDefinition();
@@ -203,12 +206,11 @@ var MongoCollection = /** @class */ (function () {
         if (options === void 0) { options = undefined; }
         var schema = this.getSchemaDefinition();
         var collection = schema.collection();
-        var data = this.toObject();
+        var data = this.toMongoStore();
         var validationResult = schema.validate(data);
         if (!validationResult) {
             return collection.insertOne(data, options).then(function (result) {
                 _this._id = result.insertedId; // Assign inserted _id
-                console.log("New insertedId:", _this._id);
                 return _this;
             });
         }
@@ -219,7 +221,7 @@ var MongoCollection = /** @class */ (function () {
         if (options === void 0) { options = undefined; }
         var schema = this.getSchemaDefinition();
         var collection = schema.collection();
-        var data = this.toObject();
+        var data = this.toMongoStore();
         var validationResult = schema.validate(data);
         if (!validationResult) {
             return collection.updateOne({
@@ -243,7 +245,7 @@ var MongoCollection = /** @class */ (function () {
     MongoCollection.prototype.replace = function (replaceWith) {
         var schema = replaceWith.getSchemaDefinition();
         var collection = schema.collection();
-        var data = replaceWith.toObject();
+        var data = replaceWith.toMongoStore();
         var validationResult = schema.validate(data);
         if (!validationResult) {
             return this.collection().replaceOne({ _id: this._id }, data);

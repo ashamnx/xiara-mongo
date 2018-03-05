@@ -121,7 +121,7 @@ export class MongoQuery<T>
 					from: foreignSchema.name,
 					localField: localField.name,
 					foreignField: foreignField.name,
-					as: "" + localField.name,
+					as: localField.name,
 				}
 			});
 

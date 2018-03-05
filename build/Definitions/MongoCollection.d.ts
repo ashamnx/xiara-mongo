@@ -9,7 +9,8 @@ export declare class MongoCollection implements ICollection {
     constructor(data?: any);
     static constructCollection<T>(type: new () => T): T;
     hydrate(data: any): void;
-    dehydrate(fields: IProperty[]): object;
+    dehydrate(fields: IProperty[], dropReferences?: boolean): object;
+    toMongoStore(): object;
     toObject(): object;
     toJSON(): object;
     getValidatedObject(): object;
