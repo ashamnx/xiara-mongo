@@ -57,9 +57,10 @@ export class MongoCollection implements ICollection
 					this[field.name] = field.options.default;
 					continue;
 				}
-
-				if(field.options.reference && typeof data[field.name] === "object")
+				console.log("data["+field.name+"]", data[field.name]);
+				if(data[field.name] && field.options.reference && typeof data[field.name] === "object")
 				{
+					console.log("hydrating:", field.name, typeof data[field.name]);
 					let referencedCollection = new field.options.reference();
 					referencedCollection.hydrate(data[field.name]);
 					this[field.name] = referencedCollection;
@@ -77,14 +78,14 @@ export class MongoCollection implements ICollection
 		{
 			if(field.options.reference)
 			{
-				if(this[field.name] === undefined)
+				if(this[field.name] === undefined || this[field.name] === null)
 					continue;	
-
+				
 				rawData[field.name] = this[field.name][field.options.by || "_id"];
 				continue;
 			}
 
-			if(this[field.name] === undefined && field.options.default !== undefined)
+			if((this[field.name] === undefined  || this[field.name] === null) && field.options.default !== undefined)
 			{
 				if(field.options.default.name == "Date")
 				{
@@ -266,6 +267,7 @@ export class MongoCollection implements ICollection
 		{
 			return collection.insertOne(data, options).then( result => {
 				this._id = result.insertedId; // Assign inserted _id
+				console.log("New insertedId:", this._id);
 				return this;
 			});
 		}

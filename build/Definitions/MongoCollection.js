@@ -46,7 +46,9 @@ var MongoCollection = /** @class */ (function () {
                     this[field.name] = field.options.default;
                     continue;
                 }
-                if (field.options.reference && typeof data[field.name] === "object") {
+                console.log("data[" + field.name + "]", data[field.name]);
+                if (data[field.name] && field.options.reference && typeof data[field.name] === "object") {
+                    console.log("hydrating:", field.name, typeof data[field.name]);
                     var referencedCollection = new field.options.reference();
                     referencedCollection.hydrate(data[field.name]);
                     this[field.name] = referencedCollection;
@@ -61,12 +63,12 @@ var MongoCollection = /** @class */ (function () {
         for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
             var field = fields_1[_i];
             if (field.options.reference) {
-                if (this[field.name] === undefined)
+                if (this[field.name] === undefined || this[field.name] === null)
                     continue;
                 rawData[field.name] = this[field.name][field.options.by || "_id"];
                 continue;
             }
-            if (this[field.name] === undefined && field.options.default !== undefined) {
+            if ((this[field.name] === undefined || this[field.name] === null) && field.options.default !== undefined) {
                 if (field.options.default.name == "Date") {
                     rawData[field.name] = new field.options.default();
                     continue;
@@ -206,6 +208,7 @@ var MongoCollection = /** @class */ (function () {
         if (!validationResult) {
             return collection.insertOne(data, options).then(function (result) {
                 _this._id = result.insertedId; // Assign inserted _id
+                console.log("New insertedId:", _this._id);
                 return _this;
             });
         }
