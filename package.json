@@ -1,6 +1,6 @@
 {
   "name": "@xiara/mongo",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Advanced Typescript MongoDB ODM. Written entirely in typescript.",
   "homepage": "https://github.com/azarus/xiara-mongo",
   "repository": {
@@ -24,7 +24,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "merge2": "^1.2.0",
-    "mongodb": "^3.0.1",
+    "mongodb": "^3.0.4",
     "reflect-metadata": "^0.1.10",
     "run-sequence": "^2.2.0",
     "rxjs": "^5.5.6",
