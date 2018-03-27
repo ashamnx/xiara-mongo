@@ -126,6 +126,11 @@ var MongoCollection = /** @class */ (function () {
         MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQuerySingle(this, query);
     };
+    MongoCollection.findLast = function (query) {
+        console.log('query::::', query);
+        MongoCollection.sanitizeQuery(query);
+        return new Query_1.MongoQuerySingle(this, query);
+    };
     MongoCollection.createOne = function (data) {
         var instance = this.constructCollection(this);
         instance.hydrate(data);
@@ -146,6 +151,15 @@ var MongoCollection = /** @class */ (function () {
             return error;
         });
     };
+    MongoCollection.findByIdAndUpdate = function (_id, data) {
+        MongoCollection.sanitizeQuery(_id);
+        var collection = this.getSchema().collection();
+        return collection.findOneAndUpdate({ _id: _id }, data).then(function (result) {
+            return result;
+        }).catch(function (error) {
+            return error;
+        });
+    };
     MongoCollection.updateOne = function (query, data, options) {
         if (options === void 0) { options = undefined; }
         MongoCollection.sanitizeQuery(query);
@@ -161,6 +175,12 @@ var MongoCollection = /** @class */ (function () {
         return collection.update(query, {
             $set: data
         }, options);
+    };
+    MongoCollection.updateMany = function (query, data, options) {
+        if (options === void 0) { options = undefined; }
+        MongoCollection.sanitizeQuery(query);
+        var collection = this.getSchema().collection();
+        return collection.updateMany(query, data, options);
     };
     MongoCollection.remove = function (query) {
         MongoCollection.sanitizeQuery(query);

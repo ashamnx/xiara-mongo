@@ -5,6 +5,7 @@ var MongoQuery = /** @class */ (function () {
         this.collection = collection;
         this.query = query;
         this.isLean = false;
+        this.isNatural = false;
         this.pipeline = [];
         this.populatedFields = [];
         if (query != null) {
@@ -73,6 +74,12 @@ var MongoQuery = /** @class */ (function () {
         });
         return this;
     };
+    MongoQuery.prototype.sort = function (clause) {
+        this.pipeline.push({
+            $sort: clause
+        });
+        return this;
+    };
     MongoQuery.prototype.limit = function (limit) {
         if (limit === void 0) { limit = 0; }
         this.pipeline.push({
@@ -129,6 +136,5 @@ var MongoQuery = /** @class */ (function () {
     return MongoQuery;
 }());
 exports.MongoQuery = MongoQuery;
-;
 
 //# sourceMappingURL=MongoQuery.js.map

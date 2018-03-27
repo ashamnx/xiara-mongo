@@ -17,9 +17,9 @@ export class SchemaValidator
 		}
 
 		
-		if(data.constructor.name !== field.type)
+		if(data && data.constructor.name !== field.type)
 		{
-			if(!field.options.reference)
+			if(!field.options.reference && (field.type !== 'Date' && data.constructor.name !== 'String'))
 			{
 				return new SchemaFieldValidationError(field.name, "Invalid Type: '" + field.type + "' is needed. '" + data.constructor.name + "' was given");	
 			}

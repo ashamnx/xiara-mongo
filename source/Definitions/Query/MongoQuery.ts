@@ -4,6 +4,7 @@ import { MongoSchemaRegistry } from "../MongoSchemaRegistry";
 export class MongoQuery<T>
 {
 	public isLean: boolean = false;
+	public isNatural: boolean = false;
 	public pipeline = [];
 	public populatedFields:any[] = [];
 	constructor(public collection: typeof MongoCollection, public query?: any)
@@ -40,8 +41,8 @@ export class MongoQuery<T>
 		}
 		return this.where(query);
 	}
-	
-	
+
+
 	gte(clause?: object): this
 	{
 		let fields = Object.keys(clause);
@@ -55,7 +56,7 @@ export class MongoQuery<T>
 		return this.where(query);
 	}
 
-	
+
 	lt(clause?: object): this
 	{
 		let fields = Object.keys(clause);
@@ -69,7 +70,7 @@ export class MongoQuery<T>
 		return this.where(query);
 	}
 
-	
+
 	lte(clause?: object): this
 	{
 		let fields = Object.keys(clause);
@@ -91,6 +92,14 @@ export class MongoQuery<T>
 		return this;
 	}
 
+	sort(clause?: object): this
+	{
+		this.pipeline.push({
+			$sort: clause
+		});
+		return this;
+	}
+
 	limit(limit:number = 0): this
 	{
 		this.pipeline.push({
@@ -101,9 +110,9 @@ export class MongoQuery<T>
 
 	populate(...fields:string[]): this
 	{
-		
+
 		let schema = this.collection.getSchema();
-		
+
 		for(var field of fields)
 		{
 			if(this.populatedFields.indexOf(field) >= 0)
@@ -115,7 +124,7 @@ export class MongoQuery<T>
 
 			let foreignSchema = localField.options.reference.getSchema();
 			let foreignField = foreignSchema.findField(localField.options.by || "_id");
-			
+
 			this.pipeline.push({
 				$lookup: {
 					from: foreignSchema.name,
@@ -124,10 +133,9 @@ export class MongoQuery<T>
 					as: localField.name,
 				}
 			});
-
-			this.pipeline.push({
-				$unwind: "$" + localField.name,
-			});
+            this.pipeline.push({
+                $unwind: "$" + localField.name,
+            });
 			this.populatedFields.push(localField.name);
 		}
 		return this;
@@ -138,8 +146,7 @@ export class MongoQuery<T>
 		return null;
 	}
 
-
-	aggregate(pipeline: any[] = [], options?: CollectionAggregationOptions, callback?: MongoCallback<any>): AggregationCursor<any>
+    aggregate(pipeline: any[] = [], options?: CollectionAggregationOptions, callback?: MongoCallback<any>): AggregationCursor<any>
 	{
 		return this.collection.getCollection().aggregate<any>(pipeline);
 	}
@@ -154,7 +161,6 @@ export class MongoQuery<T>
 			explain: explain,
 		});
 	}
-	
-	
 
-};
+
+}

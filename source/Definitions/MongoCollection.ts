@@ -57,8 +57,8 @@ export class MongoCollection implements ICollection
 					this[field.name] = field.options.default;
 					continue;
 				}
-				
-				if(data[field.name] && field.options.reference && typeof data[field.name] === "object")
+
+				if (data[field.name] && field.options.reference && typeof data[field.name] === "object")
 				{
 					let referencedCollection = new field.options.reference();
 					referencedCollection.hydrate(data[field.name]);
@@ -165,6 +165,13 @@ export class MongoCollection implements ICollection
 		return new MongoQuerySingle<T>(this, query);
 	}
 
+	static findLast<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >
+	{
+        console.log('query::::', query);
+		MongoCollection.sanitizeQuery(query);
+		return new MongoQuerySingle<T>(this, query);
+	}
+
 	static createOne<T extends MongoCollection>(data?: Object): Promise< T >
 	{
 		let instance: T = this.constructCollection<T>(<any>this);
@@ -189,6 +196,17 @@ export class MongoCollection implements ICollection
 		})
 	}
 
+	static findByIdAndUpdate<T extends MongoCollection>(_id?: Object, data?: Object): Promise<FindAndModifyWriteOpResultObject>
+	{
+		MongoCollection.sanitizeQuery(_id);
+		let collection = this.getSchema().collection();
+		return collection.findOneAndUpdate({_id: _id}, data).then( result => {
+			return result;
+		}).catch( error => {
+			return error;
+		})
+	}
+
 	static updateOne<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions = undefined): Promise<UpdateWriteOpResult>
 	{
 		MongoCollection.sanitizeQuery(query);
@@ -205,6 +223,13 @@ export class MongoCollection implements ICollection
 		return collection.update(query, {
 			$set: data
 		}, options);
+	}
+
+	static updateMany<T extends MongoCollection>(query?: Object, data?: Object, options: ReplaceOneOptions & { multi?: boolean } = undefined): Promise<UpdateWriteOpResult>
+	{
+		MongoCollection.sanitizeQuery(query);
+		let collection = this.getSchema().collection();
+		return collection.updateMany(query, data, options);
 	}
 
 	static remove(query: Object): Promise<WriteOpResult>

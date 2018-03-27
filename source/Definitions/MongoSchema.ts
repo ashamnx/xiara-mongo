@@ -164,6 +164,7 @@ export class MongoSchema
 	validate(document: object): SchemaValidationResult
 	{
 		let validatingDocument = this.callHook("validate", document);
+		
 		for(var field of this.fields)
 		{
 			var error = SchemaValidator.validateField(field, validatingDocument[field.name]);

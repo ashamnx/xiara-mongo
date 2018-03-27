@@ -4,6 +4,7 @@ export declare class MongoQuery<T> {
     collection: typeof MongoCollection;
     query: any;
     isLean: boolean;
+    isNatural: boolean;
     pipeline: any[];
     populatedFields: any[];
     constructor(collection: typeof MongoCollection, query?: any);
@@ -14,6 +15,7 @@ export declare class MongoQuery<T> {
     lt(clause?: object): this;
     lte(clause?: object): this;
     skip(skip?: number): this;
+    sort(clause?: object): this;
     limit(limit?: number): this;
     populate(...fields: string[]): this;
     cast<U>(): MongoQuery<U>;

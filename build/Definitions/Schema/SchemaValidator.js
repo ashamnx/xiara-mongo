@@ -12,8 +12,8 @@ var SchemaValidator = /** @class */ (function () {
             }
             return null;
         }
-        if (data.constructor.name !== field.type) {
-            if (!field.options.reference) {
+        if (data && data.constructor.name !== field.type) {
+            if (!field.options.reference && (field.type !== 'Date' && data.constructor.name !== 'String')) {
                 return new SchemaValidationResult_1.SchemaFieldValidationError(field.name, "Invalid Type: '" + field.type + "' is needed. '" + data.constructor.name + "' was given");
             }
         }

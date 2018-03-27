@@ -1,1 +1,1 @@
-{"version":3,"sources":["../source/Definitions/Query/index.ts"],"names":[],"mappings":";;;;;AAAA,kCAA6B;AAC7B,uCAAkC;AAClC,wCAAmC","file":"index.js","sourcesContent":["export * from \"./MongoQuery\";\r\nexport * from \"./MongoQueryMulti\";\r\nexport * from \"./MongoQuerySingle\";"]}
+{"version":3,"sources":["../source/Definitions/Query/index.ts"],"names":[],"mappings":";;;;;AAAA,kCAA6B;AAC7B,uCAAkC;AAClC,wCAAmC","file":"index.js","sourcesContent":["export * from \"./MongoQuery\";\nexport * from \"./MongoQueryMulti\";\nexport * from \"./MongoQuerySingle\";"]}
