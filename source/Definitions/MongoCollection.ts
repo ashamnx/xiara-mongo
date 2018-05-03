@@ -35,7 +35,7 @@ export class MongoCollection implements ICollection
 	{
 		if(!data)
 			return;
-			
+
 		let schema = this.getSchemaDefinition();
 		for(let field of schema.fields)
 		{
@@ -102,7 +102,7 @@ export class MongoCollection implements ICollection
 			}else{
 				rawData[field.name] = this[field.name];
 			}
-			
+
 		}
 		return rawData;
 	}
@@ -158,8 +158,14 @@ export class MongoCollection implements ICollection
 		MongoCollection.sanitizeQuery(query);
 		return new MongoQueryMulti<T>(this, query);
 	}
-	
+
 	static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >
+	{
+		MongoCollection.sanitizeQuery(query);
+		return new MongoQuerySingle<T>(this, query);
+	}
+
+	static count<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >
 	{
 		MongoCollection.sanitizeQuery(query);
 		return new MongoQuerySingle<T>(this, query);
@@ -302,7 +308,7 @@ export class MongoCollection implements ICollection
 		}
 		return Promise.reject(validationResult);
 	}
-	
+
 	update(options: ReplaceOneOptions = undefined): Promise<this>
 	{
 		let schema = this.getSchemaDefinition();
@@ -321,7 +327,7 @@ export class MongoCollection implements ICollection
 		}
 		return Promise.reject(validationResult);
 	}
-	
+
 	remove(): Promise<any>
 	{
 		if(!this._id)
