@@ -18,6 +18,7 @@ export declare class MongoCollection implements ICollection {
     static query<T extends MongoCollection>(query?: Object): MongoQuery<T>;
     static find<T extends MongoCollection>(query?: Object): MongoQueryMulti<T>;
     static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
+    static count<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
     static findLast<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
     static createOne<T extends MongoCollection>(data?: Object): Promise<T>;
     static findOneAndUpdate<T extends MongoCollection>(query?: Object, data?: Object, options?: FindOneAndReplaceOption): Promise<FindAndModifyWriteOpResultObject>;

@@ -126,6 +126,10 @@ var MongoCollection = /** @class */ (function () {
         MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQuerySingle(this, query);
     };
+    MongoCollection.count = function (query) {
+        MongoCollection.sanitizeQuery(query);
+        return new Query_1.MongoQuerySingle(this, query);
+    };
     MongoCollection.findLast = function (query) {
         console.log('query::::', query);
         MongoCollection.sanitizeQuery(query);
