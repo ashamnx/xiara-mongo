@@ -16,7 +16,6 @@ export declare class MongoQuery<T> {
     lte(clause?: object): this;
     skip(skip?: number): this;
     sort(clause?: object): this;
-    count(clause?: object): this;
     limit(limit?: number): this;
     populate(...fields: string[]): this;
     cast<U>(): MongoQuery<U>;

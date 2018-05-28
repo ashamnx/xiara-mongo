@@ -128,7 +128,8 @@ var MongoCollection = /** @class */ (function () {
     };
     MongoCollection.count = function (query) {
         MongoCollection.sanitizeQuery(query);
-        return new Query_1.MongoQuerySingle(this, query);
+        var collection = this.getSchema().collection();
+        return collection.count(query);
     };
     MongoCollection.findLast = function (query) {
         console.log('query::::', query);

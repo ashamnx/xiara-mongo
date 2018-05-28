@@ -1,43 +1,33 @@
 {
-  "name": "@xiara/mongo",
-  "version": "0.0.8",
-  "description": "Advanced Typescript MongoDB ODM. Written entirely in typescript.",
-  "homepage": "https://github.com/azarus/xiara-mongo",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/azarus/xiara-mongo.git"
-  },
-  "main": "./build/main.js",
-  "types": "./build/main.d.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "browserify": "^14.5.0",
-    "express": "^4.16.2",
-    "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-typescript": "^3.2.3",
-    "gulp-uglify": "^3.0.0",
-    "gulp-util": "^3.0.8",
-    "merge2": "^1.2.0",
-    "mongodb": "^3.0.4",
-    "reflect-metadata": "^0.1.10",
-    "run-sequence": "^2.2.0",
-    "rxjs": "^5.5.6",
-    "tsify": "^3.0.4",
-    "typescript": "^2.6.2",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "devDependencies": {
-    "@types/body-parser": "^1.16.8",
-    "@types/cookie-parser": "^1.4.1",
-    "@types/express": "^4.11.0",
-    "@types/mongodb": "^2.2.18",
-    "@types/node": "^8.5.2"
-  }
+    "name": "@xiara/mongo",
+    "version": "0.0.8",
+    "description": "Advanced Typescript MongoDB ODM. Written entirely in typescript.",
+    "homepage": "https://github.com/azarus/xiara-mongo",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/azarus/xiara-mongo.git"
+    },
+    "main": "./build/main.js",
+    "types": "./build/main.d.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "gulp": "^4.0.0",
+        "gulp-clean": "^0.4.0",
+        "gulp-sourcemaps": "^2.6.1",
+        "gulp-typescript": "^4.0.2",
+        "gulp-util": "^3.0.8",
+        "merge2": "^1.2.2",
+        "mongodb": "^3.0.4",
+        "reflect-metadata": "^0.1.10",
+        "typescript": "^2.8.3",
+        "rxjs": "^6.2.0"
+    },
+    "devDependencies": {
+        "@types/mongodb": "^2.2.18",
+        "@types/node": "^8.5.2"
+    }
 }

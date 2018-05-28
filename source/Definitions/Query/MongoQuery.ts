@@ -100,14 +100,6 @@ export class MongoQuery<T>
 		return this;
 	}
 
-	count(clause?: object): this
-	{
-		this.pipeline.push({
-			count: clause
-		});
-		return this;
-	}
-
 	limit(limit:number = 0): this
 	{
 		this.pipeline.push({

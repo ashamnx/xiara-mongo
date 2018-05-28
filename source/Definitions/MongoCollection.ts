@@ -165,10 +165,11 @@ export class MongoCollection implements ICollection
 		return new MongoQuerySingle<T>(this, query);
 	}
 
-	static count<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >
+	static count<T extends MongoCollection>(query?: Object): Promise<number>
 	{
-		MongoCollection.sanitizeQuery(query);
-		return new MongoQuerySingle<T>(this, query);
+        MongoCollection.sanitizeQuery(query);
+        let  collection = this.getSchema().collection();
+        return collection.count(query);
 	}
 
 	static findLast<T extends MongoCollection>(query?: Object): MongoQuerySingle< T >

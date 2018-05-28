@@ -80,12 +80,6 @@ var MongoQuery = /** @class */ (function () {
         });
         return this;
     };
-    MongoQuery.prototype.count = function (clause) {
-        this.pipeline.push({
-            count: clause
-        });
-        return this;
-    };
     MongoQuery.prototype.limit = function (limit) {
         if (limit === void 0) { limit = 0; }
         this.pipeline.push({
