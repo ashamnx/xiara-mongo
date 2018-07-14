@@ -2,7 +2,7 @@ import { AggregationCursor, CollectionAggregationOptions, MongoCallback } from "
 import { MongoCollection } from "../MongoCollection";
 export declare class MongoQuery<T> {
     collection: typeof MongoCollection;
-    query: any;
+    query?: any;
     isLean: boolean;
     isNatural: boolean;
     pipeline: any[];

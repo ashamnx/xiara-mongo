@@ -1,9 +1,8 @@
-import { IConnectionOptions } from "./Utils";
-import { Observable, BehaviorSubject } from "rxjs";
-import { Db } from "mongodb";
+import { IConnectionOptions } from './Utils';
+import { BehaviorSubject, Observable } from 'rxjs';
 export declare class MongoConnection {
     protected _OnConnectedSubject: BehaviorSubject<boolean>;
-    protected _db: Db;
+    protected _db: any;
     constructor(options: IConnectionOptions);
     OnConnect(): Observable<boolean>;
     connect(options: IConnectionOptions): void;

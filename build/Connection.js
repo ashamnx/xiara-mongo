@@ -33,7 +33,7 @@ var MongoConnection = /** @class */ (function () {
     MongoConnection.prototype.close = function (forceClose) {
         if (forceClose === void 0) { forceClose = false; }
         if (!this._db) {
-            throw Error("Not connected.");
+            throw Error('Not connected.');
         }
         return this._db.close(forceClose);
     };
