@@ -1,6 +1,6 @@
 {
-    "name": "@xiara/mongo",
-    "version": "0.0.8",
+    "name": "@ashamnx/mongo",
+    "version": "1.0.0",
     "description": "Advanced Typescript MongoDB ODM. Written entirely in typescript.",
     "homepage": "https://github.com/azarus/xiara-mongo",
     "repository": {

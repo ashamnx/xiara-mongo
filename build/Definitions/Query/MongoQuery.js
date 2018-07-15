@@ -87,6 +87,12 @@ var MongoQuery = /** @class */ (function () {
         });
         return this;
     };
+    MongoQuery.prototype.project = function (clause) {
+        this.pipeline.push({
+            $project: clause
+        });
+        return this;
+    };
     MongoQuery.prototype.populate = function () {
         var fields = [];
         for (var _i = 0; _i < arguments.length; _i++) {

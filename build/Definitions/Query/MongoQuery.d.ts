@@ -17,6 +17,7 @@ export declare class MongoQuery<T> {
     skip(skip?: number): this;
     sort(clause?: object): this;
     limit(limit?: number): this;
+    project(clause: object): this;
     populate(...fields: string[]): this;
     cast<U>(): MongoQuery<U>;
     aggregate(pipeline?: any[], options?: CollectionAggregationOptions, callback?: MongoCallback<any>): AggregationCursor<any>;

@@ -108,6 +108,13 @@ export class MongoQuery<T>
 		return this;
 	}
 
+    project(clause: object): this {
+		this.pipeline.push({
+            $project: clause
+		});
+		return this;
+	}
+
 	populate(...fields:string[]): this
 	{
 
