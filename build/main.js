@@ -7,5 +7,7 @@ require("reflect-metadata");
 __export(require("./MongoAdapter"));
 __export(require("./Definitions"));
 __export(require("mongodb"));
+var bson_1 = require("bson");
+exports.ObjectId = bson_1.ObjectId;
 
 //# sourceMappingURL=main.js.map
