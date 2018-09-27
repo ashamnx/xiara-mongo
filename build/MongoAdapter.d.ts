@@ -7,3 +7,4 @@ export declare class MongoAdapter extends MongoConnection {
     bootstrap(collections: typeof MongoCollection[]): void;
     initCollection(collection: typeof MongoCollection): void;
 }
+//# sourceMappingURL=MongoAdapter.d.ts.map

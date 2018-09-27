@@ -4,3 +4,4 @@ import { IProperty } from "../MongoSchema";
 export declare class SchemaValidator {
     static validateField(field: IProperty, data: object): SchemaFieldValidationError;
 }
+//# sourceMappingURL=SchemaValidator.d.ts.map

@@ -6,3 +6,4 @@ export declare class MongoQueryMulti<T extends MongoCollection> extends MongoQue
     exec(): Promise<T[]>;
     forEach(callback: any, done?: any): void;
 }
+//# sourceMappingURL=MongoQueryMulti.d.ts.map

@@ -25,3 +25,4 @@ export declare class MongoQuery<T> {
         batchSize: number;
     }, explain?: boolean): AggregationCursor<any>;
 }
+//# sourceMappingURL=MongoQuery.d.ts.map

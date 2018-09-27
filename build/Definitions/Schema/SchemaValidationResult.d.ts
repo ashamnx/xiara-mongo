@@ -11,3 +11,4 @@ export declare class SchemaFieldValidationError extends SchemaValidationResult {
     message: string;
     constructor(field: string, message: string);
 }
+//# sourceMappingURL=SchemaValidationResult.d.ts.map

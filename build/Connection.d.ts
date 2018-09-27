@@ -8,3 +8,4 @@ export declare class MongoConnection {
     connect(options: IConnectionOptions): void;
     close(forceClose?: boolean): Promise<void>;
 }
+//# sourceMappingURL=Connection.d.ts.map

@@ -6,3 +6,4 @@ export declare class MongoSchemaRegistry {
     static register(name: string, schema: MongoSchema): void;
     static getSchema(name: string): MongoSchema;
 }
+//# sourceMappingURL=MongoSchemaRegistry.d.ts.map

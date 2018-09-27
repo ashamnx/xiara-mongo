@@ -49,3 +49,4 @@ export declare class MongoSchema {
     callHook(hookName: string, input?: any): any;
     validate(document: object): SchemaValidationResult;
 }
+//# sourceMappingURL=MongoSchema.d.ts.map

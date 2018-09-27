@@ -11,3 +11,4 @@ export declare class IConnectionOptions {
     Port?: number;
     Database?: string;
 }
+//# sourceMappingURL=IConnectionOptions.d.ts.map

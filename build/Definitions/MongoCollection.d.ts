@@ -44,3 +44,4 @@ export declare class MongoCollection implements ICollection {
     remove(): Promise<any>;
     replace(replaceWith: MongoCollection): Promise<WriteOpResult>;
 }
+//# sourceMappingURL=MongoCollection.d.ts.map

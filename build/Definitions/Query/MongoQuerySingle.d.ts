@@ -5,3 +5,4 @@ export declare class MongoQuerySingle<T extends MongoCollection> extends MongoQu
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
     exec(): Promise<T>;
 }
+//# sourceMappingURL=MongoQuerySingle.d.ts.map
