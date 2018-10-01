@@ -27,93 +27,6 @@ var MongoCollection = /** @class */ (function () {
     MongoCollection.constructCollection = function (type) {
         return new type();
     };
-    MongoCollection.prototype.hydrate = function (data) {
-        if (!data)
-            return;
-        var schema = this.getSchemaDefinition();
-        for (var _i = 0, _a = schema.fields; _i < _a.length; _i++) {
-            var field = _a[_i];
-            if (field.options) {
-                if (data[field.name] === undefined && field.options.default !== undefined) {
-                    if (field.options.default.name == "Date") {
-                        this[field.name] = new field.options.default();
-                        continue;
-                    }
-                    if (typeof field.options.default === "function") {
-                        this[field.name] = field.options.default();
-                        continue;
-                    }
-                    this[field.name] = field.options.default;
-                    continue;
-                }
-                if (data[field.name] && field.options.reference && typeof data[field.name] === "object") {
-                    var referencedCollection = new field.options.reference();
-                    referencedCollection.hydrate(data[field.name]);
-                    this[field.name] = referencedCollection;
-                    continue;
-                }
-            }
-            this[field.name] = data[field.name];
-        }
-    };
-    MongoCollection.prototype.dehydrate = function (fields, dropReferences) {
-        if (dropReferences === void 0) { dropReferences = false; }
-        var rawData = {};
-        for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
-            var field = fields_1[_i];
-            if (field.options.reference && dropReferences) {
-                if (this[field.name] === undefined || this[field.name] === null)
-                    continue;
-                rawData[field.name] = this[field.name][field.options.by || "_id"];
-                continue;
-            }
-            if ((this[field.name] === undefined || this[field.name] === null) && field.options.default !== undefined) {
-                if (field.options.default.name == "Date") {
-                    rawData[field.name] = new field.options.default();
-                    continue;
-                }
-                if (typeof field.options.default === "function") {
-                    rawData[field.name] = field.options.default();
-                    continue;
-                }
-                else {
-                    rawData[field.name] = field.options.default;
-                }
-            }
-            else {
-                rawData[field.name] = this[field.name];
-            }
-        }
-        return rawData;
-    };
-    MongoCollection.prototype.toMongoStore = function () {
-        var schema = this.getSchemaDefinition();
-        return this.dehydrate(schema.fields, true);
-    };
-    MongoCollection.prototype.toObject = function () {
-        var schema = this.getSchemaDefinition();
-        return this.dehydrate(schema.fields);
-    };
-    // Same as dehydrate but drops the hidden fields
-    MongoCollection.prototype.toJSON = function () {
-        var schema = this.getSchemaDefinition();
-        return this.dehydrate(schema.getVisibleFields());
-    };
-    MongoCollection.prototype.getValidatedObject = function () {
-        var schema = this.getSchemaDefinition();
-        var collection = schema.collection();
-        var data = this.toObject();
-        var validationResult = schema.validate(data);
-        if (!validationResult) {
-            return null;
-        }
-        return data;
-    };
-    MongoCollection.sanitizeQuery = function (query) {
-        if (query && query._id && typeof query._id === "string") {
-            query._id = new bson_1.ObjectID(query._id);
-        }
-    };
     MongoCollection.query = function (query) {
         MongoCollection.sanitizeQuery(query);
         return new Query_1.MongoQuery(this, query);
@@ -129,7 +42,7 @@ var MongoCollection = /** @class */ (function () {
     MongoCollection.count = function (query) {
         MongoCollection.sanitizeQuery(query);
         var collection = this.getSchema().collection();
-        return collection.count(query);
+        return collection.countDocuments(query);
     };
     MongoCollection.findLast = function (query) {
         console.log('query::::', query);
@@ -210,6 +123,93 @@ var MongoCollection = /** @class */ (function () {
     MongoCollection.stats = function () {
         return this.getCollection().stats();
     };
+    MongoCollection.sanitizeQuery = function (query) {
+        if (query && query._id && typeof query._id === 'string') {
+            query._id = new bson_1.ObjectID(query._id);
+        }
+    };
+    MongoCollection.prototype.hydrate = function (data) {
+        if (!data)
+            return;
+        var schema = this.getSchemaDefinition();
+        for (var _i = 0, _a = schema.fields; _i < _a.length; _i++) {
+            var field = _a[_i];
+            if (field.options) {
+                if (data[field.name] === undefined && field.options.default !== undefined) {
+                    if (field.options.default.name == 'Date') {
+                        this[field.name] = new field.options.default();
+                        continue;
+                    }
+                    if (typeof field.options.default === 'function') {
+                        this[field.name] = field.options.default();
+                        continue;
+                    }
+                    this[field.name] = field.options.default;
+                    continue;
+                }
+                if (data[field.name] && field.options.reference && typeof data[field.name] === 'object') {
+                    var referencedCollection = new field.options.reference();
+                    referencedCollection.hydrate(data[field.name]);
+                    this[field.name] = referencedCollection;
+                    continue;
+                }
+            }
+            this[field.name] = data[field.name];
+        }
+    };
+    MongoCollection.prototype.dehydrate = function (fields, dropReferences) {
+        if (dropReferences === void 0) { dropReferences = false; }
+        var rawData = {};
+        for (var _i = 0, fields_1 = fields; _i < fields_1.length; _i++) {
+            var field = fields_1[_i];
+            if (field.options.reference && dropReferences) {
+                if (this[field.name] === undefined || this[field.name] === null)
+                    continue;
+                rawData[field.name] = this[field.name][field.options.by || '_id'];
+                continue;
+            }
+            if ((this[field.name] === undefined || this[field.name] === null) && field.options.default !== undefined) {
+                if (field.options.default.name == 'Date') {
+                    rawData[field.name] = new field.options.default();
+                    continue;
+                }
+                if (typeof field.options.default === 'function') {
+                    rawData[field.name] = field.options.default();
+                    continue;
+                }
+                else {
+                    rawData[field.name] = field.options.default;
+                }
+            }
+            else {
+                rawData[field.name] = this[field.name];
+            }
+        }
+        return rawData;
+    };
+    MongoCollection.prototype.toMongoStore = function () {
+        var schema = this.getSchemaDefinition();
+        return this.dehydrate(schema.fields, true);
+    };
+    MongoCollection.prototype.toObject = function () {
+        var schema = this.getSchemaDefinition();
+        return this.dehydrate(schema.fields);
+    };
+    // Same as dehydrate but drops the hidden fields
+    MongoCollection.prototype.toJSON = function () {
+        var schema = this.getSchemaDefinition();
+        return this.dehydrate(schema.getVisibleFields());
+    };
+    MongoCollection.prototype.getValidatedObject = function () {
+        var schema = this.getSchemaDefinition();
+        var collection = schema.collection();
+        var data = this.toObject();
+        var validationResult = schema.validate(data);
+        if (!validationResult) {
+            return null;
+        }
+        return data;
+    };
     MongoCollection.prototype.collection = function () {
         return this.getSchemaDefinition().collection();
     };
@@ -261,7 +261,7 @@ var MongoCollection = /** @class */ (function () {
     };
     MongoCollection.prototype.remove = function () {
         if (!this._id) {
-            return Promise.reject("_id is not defined");
+            return Promise.reject('_id is not defined');
         }
         return this.collection().deleteOne({
             _id: this._id

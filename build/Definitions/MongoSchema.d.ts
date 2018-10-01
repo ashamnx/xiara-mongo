@@ -1,6 +1,6 @@
-import { Db, Collection, CollectionCreateOptions } from "mongodb";
-import { SchemaValidationResult } from "./Schema";
-import { MongoCollection } from "./MongoCollection";
+import { Collection, CollectionCreateOptions, Db } from 'mongodb';
+import { SchemaValidationResult } from './Schema';
+import { MongoCollection } from './MongoCollection';
 export interface IPropertyOptions {
     name?: string;
     required?: boolean;
@@ -25,16 +25,17 @@ export interface IProperty {
 export interface IModelOptions {
     indexes?: IPropertyIndex[];
     inherits?: any[];
+    log: any;
 }
 export declare class MongoSchema {
     CollectionSpec: any;
     name: string;
     indexes: IPropertyIndex[];
     fields: IProperty[];
-    protected DB: Db;
     createOptions: CollectionCreateOptions;
     hooks: any;
     inherits: typeof MongoCollection[];
+    protected DB: Db;
     constructor(CollectionSpec: any);
     addField(fieldName: string, fieldType: any, fieldOptions: IPropertyOptions): void;
     getHiddenFields(): any;

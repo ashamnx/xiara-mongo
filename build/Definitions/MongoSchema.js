@@ -35,17 +35,17 @@ var MongoSchema = /** @class */ (function () {
         });
     };
     MongoSchema.prototype.getHiddenFields = function () {
-        return this.callHook("fields:hidden", this.fields.filter(function (field) { return field.options.hidden; }));
+        return this.callHook('fields:hidden', this.fields.filter(function (field) { return field.options.hidden; }));
     };
     MongoSchema.prototype.getVisibleFields = function () {
-        return this.callHook("fields:visible", this.fields.filter(function (field) { return !field.options.hidden; }));
+        return this.callHook('fields:visible', this.fields.filter(function (field) { return !field.options.hidden; }));
     };
     MongoSchema.prototype.addIndex = function (index) {
         this.indexes.push(index);
     };
     MongoSchema.prototype.setConnection = function (db) {
         this.DB = db;
-        this.callHook("db:connected");
+        this.callHook('db:connected');
     };
     MongoSchema.prototype.findField = function (name) {
         return this.fields.find(function (field) {
@@ -73,7 +73,7 @@ var MongoSchema = /** @class */ (function () {
     MongoSchema.prototype.createCollection = function () {
         var _this = this;
         this.DB.createCollection(this.name, this.createOptions).then(function (result) {
-            _this.callHook("collection:created");
+            _this.callHook('collection:created');
             for (var _i = 0, _a = _this.indexes; _i < _a.length; _i++) {
                 var index = _a[_i];
                 _this.collection().createIndex(index.specification, {
@@ -82,7 +82,7 @@ var MongoSchema = /** @class */ (function () {
                     w: 1
                 });
             }
-            _this.callHook("indexes:created");
+            _this.callHook('indexes:created');
         });
     };
     MongoSchema.prototype.registerHook = function (hookName, callback) {
@@ -95,7 +95,7 @@ var MongoSchema = /** @class */ (function () {
         return input;
     };
     MongoSchema.prototype.validate = function (document) {
-        var validatingDocument = this.callHook("validate", document);
+        var validatingDocument = this.callHook('validate', document);
         for (var _i = 0, _a = this.fields; _i < _a.length; _i++) {
             var field = _a[_i];
             var error = Schema_1.SchemaValidator.validateField(field, validatingDocument[field.name]);

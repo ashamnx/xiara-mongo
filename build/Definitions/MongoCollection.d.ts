@@ -1,6 +1,6 @@
-import { MongoSchema, IProperty } from "./MongoSchema";
-import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from "./Query";
-import { Collection, AggregationCursor, ObjectId, WriteOpResult, UpdateWriteOpResult, CollectionInsertOneOptions, ReplaceOneOptions, CollStats, FindOneAndReplaceOption, FindAndModifyWriteOpResultObject } from "mongodb";
+import { IProperty, MongoSchema } from './MongoSchema';
+import { MongoQuery, MongoQueryMulti, MongoQuerySingle } from './Query';
+import { AggregationCursor, Collection, CollectionInsertOneOptions, CollStats, FindAndModifyWriteOpResultObject, FindOneAndReplaceOption, ObjectId, ReplaceOneOptions, UpdateWriteOpResult, WriteOpResult } from 'mongodb';
 export interface ICollection {
     getSchemaDefinition(): MongoSchema;
 }
@@ -8,13 +8,6 @@ export declare class MongoCollection implements ICollection {
     _id: ObjectId;
     constructor(data?: any);
     static constructCollection<T>(type: new () => T): T;
-    hydrate(data: any): void;
-    dehydrate(fields: IProperty[], dropReferences?: boolean): object;
-    toMongoStore(): object;
-    toObject(): object;
-    toJSON(): object;
-    getValidatedObject(): object;
-    private static sanitizeQuery;
     static query<T extends MongoCollection>(query?: Object): MongoQuery<T>;
     static find<T extends MongoCollection>(query?: Object): MongoQueryMulti<T>;
     static findOne<T extends MongoCollection>(query?: Object): MongoQuerySingle<T>;
@@ -36,6 +29,13 @@ export declare class MongoCollection implements ICollection {
     static getSchema(): MongoSchema;
     static getCollection(): Collection<any>;
     static stats(): Promise<CollStats>;
+    private static sanitizeQuery;
+    hydrate(data: any): void;
+    dehydrate(fields: IProperty[], dropReferences?: boolean): object;
+    toMongoStore(): object;
+    toObject(): object;
+    toJSON(): object;
+    getValidatedObject(): object;
     collection(): Collection<any>;
     getSchemaDefinition(): MongoSchema;
     save(options?: any): Promise<any>;

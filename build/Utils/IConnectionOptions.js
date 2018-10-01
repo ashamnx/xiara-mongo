@@ -6,13 +6,11 @@ var IReplicaConnection = /** @class */ (function () {
     return IReplicaConnection;
 }());
 exports.IReplicaConnection = IReplicaConnection;
-;
 var IConnectionOptions = /** @class */ (function () {
     function IConnectionOptions() {
     }
     return IConnectionOptions;
 }());
 exports.IConnectionOptions = IConnectionOptions;
-;
 
 //# sourceMappingURL=IConnectionOptions.js.map

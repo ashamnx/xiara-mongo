@@ -41,7 +41,6 @@ function Model(name, options, createOptions) {
     };
 }
 exports.Model = Model;
-;
 function Property(fieldOptions) {
     if (fieldOptions === void 0) { fieldOptions = {}; }
     return function (target, key) {
@@ -50,11 +49,10 @@ function Property(fieldOptions) {
             schema = new MongoSchema_1.MongoSchema(target.constructor);
             MongoSchemaRegistry_1.MongoSchemaRegistry.register(target.constructor.name, schema);
         }
-        schema.addField(key, Reflect.getMetadata("design:type", target, key), fieldOptions);
+        schema.addField(key, Reflect.getMetadata('design:type', target, key), fieldOptions);
     };
 }
 exports.Property = Property;
-;
 function Hook(hookName) {
     return function (target, key) {
         if (!target.SchemaDefinition) {
@@ -65,6 +63,5 @@ function Hook(hookName) {
     };
 }
 exports.Hook = Hook;
-;
 
 //# sourceMappingURL=Decorators.js.map
