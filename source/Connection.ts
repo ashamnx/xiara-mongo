@@ -19,7 +19,8 @@ export class MongoConnection {
         let connectionString = CreateConnectionString(options);
         MongoClient.connect(connectionString, {
             autoReconnect: true,
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         }, (error: MongoError, db) => {
             if (error) {
                 this._OnConnectedSubject.next(null);

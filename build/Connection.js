@@ -18,7 +18,8 @@ var MongoConnection = /** @class */ (function () {
         var connectionString = Utils_1.CreateConnectionString(options);
         mongodb_1.MongoClient.connect(connectionString, {
             autoReconnect: true,
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true
         }, function (error, db) {
             if (error) {
                 _this._OnConnectedSubject.next(null);
