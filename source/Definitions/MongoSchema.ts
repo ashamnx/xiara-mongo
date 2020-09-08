@@ -115,7 +115,7 @@ export class MongoSchema {
     }
 
     createCollection() {
-        this.DB.createCollection(this.name, this.createOptions).then(result => {
+        this.DB.createCollection(this.name, {strict:false, ...this.createOptions}).then(result => {
             this.callHook('collection:created');
             for (let index of this.indexes) {
                 this.collection().createIndex(index.specification, {
