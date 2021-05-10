@@ -22,7 +22,7 @@ export class MongoAdapter extends MongoConnection
 				}
 			}
 		});
-		
+
 	}
 
 	initCollection(collection: typeof MongoCollection)
@@ -30,6 +30,7 @@ export class MongoAdapter extends MongoConnection
 		let schema = collection.getSchema();
 		schema.prepare();
 		schema.setConnection(this._db); // Connect the schema with this adapter.
+		schema.
 		schema.createCollection();
 
 		this.collections.push(collection);

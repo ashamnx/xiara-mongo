@@ -125,7 +125,7 @@ export class MongoSchema {
                 });
             }
             this.callHook('indexes:created');
-        });
+        }).catch(error => console.log(`Collection: ${this.name} Exists`, error));
     }
 
     registerHook(hookName: string, callback: any) {
